@@ -39,6 +39,10 @@ var ParserGen = function (tokenizers) {
                 var tokenizer = dict[i];
                 tokenizer.test(src)
             }
+            if (!lex.closest()) {
+                console.warn("No tokens found.");
+                return;
+            }
             return {
                 tokenizer: lex.closest(),
                 token: lex.closest().getMatch(src)
@@ -80,6 +84,9 @@ var ParserGen = function (tokenizers) {
         lex.setIndex(0);
         while (index < this.length) {
             var match = lex.match(this);
+            if (!match) {
+                return cb ? cb([]) : [];
+            }
             tokens[tokenIndex++] = match.token;
             index = match.tokenizer.pattern.lastIndex;
             lex.setIndex(index);
@@ -97,10 +104,3 @@ tokenizers = [
 
 String.prototype.parse = new ParserGen(tokenizers);
 String.prototype.parse.bind(this);
-
-window.onload = function () {
-    document.querySelector("button").onclick = function () {
-        var val = document.querySelector("#src").value;
-        document.querySelector("#parsed").value = val.parse();
-    };
-};
