@@ -65,7 +65,7 @@ var ParserGen = function (tokenizers) {
         return lex;
     }
     
-    return function () {
+    return function (cb) {
         var tokens = [];
         
         var index = 0, tokenIndex = 0, i = 0;
@@ -77,7 +77,7 @@ var ParserGen = function (tokenizers) {
             lex.setIndex(index);
         }
         
-        return tokens;
+        return cb ? cb(tokens) : tokens;
     };
 };
 
