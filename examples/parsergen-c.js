@@ -21,7 +21,10 @@ var ParserGen = function (tokenizers) {
                 tokenizer.setIndex(oldIndex);
             };
             tokenizer.getMatch = function (src) {
-                return tokenizer.pattern.exec(src)[1];
+                return {
+                    type: tokenizer.type,
+                    entity: tokenizer.pattern.exec(src)[1]
+                };
             };
             return tokenizer;
         }
