@@ -44,7 +44,7 @@ var ParserGen = function (tokenizers) {
             }
             if (!lex.closest()) {
                 console.warn("No tokens found.");
-                return;
+                return null;
             }
             return {
                 tokenizer: lex.closest(),
@@ -108,10 +108,13 @@ var ParserGen = function (tokenizers) {
  *
  * RegExp must have `g` flag.
  * Make sure the field to capture is the first capture group!
+ *
+ *
+ *
+ * tokenizers = [
+ *     // start here
+ * ];
+ * 
+ * String.prototype.parse = new ParserGen(tokenizers);
+ * String.prototype.parse.bind(this);
  */
-tokenizers = [
-    // start here
-];
-
-String.prototype.parse = new ParserGen(tokenizers);
-String.prototype.parse.bind(this);
