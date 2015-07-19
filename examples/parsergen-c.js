@@ -21,10 +21,13 @@ var ParserGen = function (tokenizers) {
                 tokenizer.setIndex(oldIndex);
             };
             tokenizer.getMatch = function (src) {
-                var thematch = tokenizer.pattern.exec(src);
-                return thematch[1];
+                return tokenizer.pattern.exec(src)[1];
             };
             return tokenizer;
+        }
+
+        lex.isEmpty = function () {
+            return !dict.length;
         }
 
         lex.getDict = function () {
@@ -66,6 +69,11 @@ var ParserGen = function (tokenizers) {
     }
     
     return function (cb) {
+        if (lex.isEmpty()) {
+            console.warn("No tokenizers defined; parse aborted.");
+            return [];
+        }
+
         var tokens = [];
         
         var index = 0, tokenIndex = 0, i = 0;
