@@ -75,7 +75,7 @@ var ParserGen = function (tokenizers) {
         return lex;
     }
     
-    return function (cb) {
+    this.tokenize = function (cb) {
         if (lex.isEmpty()) {
             console.warn("No tokenizers defined; parse aborted.");
             return [];
@@ -95,26 +95,19 @@ var ParserGen = function (tokenizers) {
             lex.setIndex(index);
         }
         
+        this.tokens = tokens;
         return cb ? cb(tokens) : tokens;
     };
+    
+    this.parse = function (cb) {
+        if (!this.tokens) {
+            console.warn("String hasn't been tokenized; parse aborted.");
+            return cb ? cb([]) : [];
+        }
+        
+        /* TODO: build abstract syntax tree here using CFG */
+        ast = [];
+        
+        return cb ? cb([]) : [];
+    };
 };
-
-/* Define your tokenizers here!
- * Use the following form:
- *    [name, regexp]
- *
- * for example,
- *    ["number", /([0-9]+)/g]
- *
- * RegExp must have `g` flag.
- * Make sure the field to capture is the first capture group!
- *
- *
- *
- * tokenizers = [
- *     // start here
- * ];
- * 
- * String.prototype.parse = new ParserGen(tokenizers);
- * String.prototype.parse.bind(this);
- */
