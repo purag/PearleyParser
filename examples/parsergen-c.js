@@ -1,5 +1,5 @@
 tokenizers = [
-    ["identifier", /([A-Za-z_][A-Za-z_0-9]*)/g],
+    ["word", /([A-Za-z_][A-Za-z_0-9]*)/g],
     ["number", /([0-9]+)/g],
     ["parens", /(\(|\))/g],
     ["comma", /(\,)/g],
@@ -7,8 +7,14 @@ tokenizers = [
     ["semicolon", /(;)/g],
     ["assignment", /(\=)/g],
     ["string", /(".*")/g],
-    ["character", /('.')/g]
+    ["character", /('.')/g],
+    ["comment", /(\/\*([\s\S]*)\*\/)/g]
 ];
 
-String.prototype.parse = new ParserGen(tokenizers);
+var parser = new ParserGen(tokenizers);
+
+String.prototype.tokenize = parser.tokenize;
+String.prototype.parse.bind(this);
+
+String.prototype.parse = parser.parse;
 String.prototype.parse.bind(this);
