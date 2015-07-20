@@ -8,7 +8,7 @@ tokenizers = [
     ["assignment", /(\=)/g],
     ["string", /(".*")/g],
     ["character", /('.')/g],
-    ["comment", /(\/\*([\s\S]*)\*\/)/g]
+    ["comment", /(\/\*([\s\S]*?)\*\/)/g]
 ];
 
 var parser = new ParserGen(tokenizers);
