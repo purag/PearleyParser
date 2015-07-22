@@ -38,7 +38,7 @@ window.onload = function () {
             }
             tokenized.value += "\n\n";
             parser.parse(src, function (ast) {
-                ast.value += ast[0].type + ", " + ast[0].value;
+                ast.value += ast;
             });
         });
     };
