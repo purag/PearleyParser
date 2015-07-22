@@ -174,8 +174,8 @@ function ParserGen (tokenizers) {
                  * (2) closest is not already set, or
                  */
                 if (dict[i].nextMatch
-                    && (dict[i].nextMatch.index < closest.nextMatch.index
-                        || !closest)
+                    && ( !closest
+                        || dict[i].nextMatch.index < closest.nextMatch.index)
                 ){
                    closest = dict[i];
                 }
