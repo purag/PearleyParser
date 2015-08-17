@@ -1,13 +1,13 @@
 /* Author:  Purag Moumdjian
- * File:    ParserGen.js
- * Date:    21 July 2015 (v0.1 pre-release)
+ * File:    PearleyParser.js
+ * Date:    17 Aug 2015 (v0.1 pre-release)
  * License: GNU General Public License v2.0
  * 
- * ParserGen is a text parsing tool that tokenizes text according to the
- * tokenizers passed in and creates parse trees according to the context free
- * grammar passed in.
+ * PearleyParser is a lexical analyzer and text parser that creates a parser
+ * object able to parse the language specified by the given BNF.
+ *
+ * @TODO: Easy error recovery - possibly continue parsing but throw an error?
  */
-
 function PearleyParser (lexRules, bnf) {
     var bnfLexRules = [
         ["identifier", /([A-Za-z_][A-Za-z_0-9]+)/g],
@@ -280,7 +280,6 @@ function PearleyParser (lexRules, bnf) {
                                 wordToCheck = oldState.nextWord();
                             /* if the completed rule satisfies the next word for the old state... */
                             if (!oldState.complete() && curState.type == wordToCheck.type) {
-                                if (i === 6) console.log("completing " + oldState.type);
                                 var newState = oldState.advance();
                                 newState.ast.newChild(curState.ast);
                                 /* then advance the old state and push it to this set to evaluate soon */
