@@ -1,8 +1,11 @@
-# ParserGen
-Tokenizes Javascript strings according to the defined tokenizers.
+# PearleyParser
+A parser generator using the Earley parsing algorithm.
 
-Iterates over strings, constructing an array of tokens matched by the given dictionary of regular expressions.
+PearleyParser supports built-in lexical analysis and parse tree generation. The result of the `parse()` function is a completed parse tree, if it exists, or a `"Parse failed"` message.
+
+### Coming Soon:
+A walkthrough of the algorithm used here!
 
 ## TODO:
-1. Utilize CFG
-2. Parser tool to build abstract syntax trees based on CFG.
+1. Parse user lex rules to generate tokenizers for the lexer.
+2. Determine the ideal parse more effectively. It's not always the longest.
