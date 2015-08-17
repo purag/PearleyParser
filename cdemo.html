@@ -76,9 +76,9 @@
 			        ["scope", /(\{|\})/g],
 			        ["semicolon", /(;)/g],
 			        ["assignment_op", /((&|\||\^|%|\+|\-|\*|\/|<<|>>)?\=)/g],
-			        ["operator", /(\+|\-|\*|\/|\%)/g],
 			        ["relational_op", /((<|>)=?)/g],
-			        ["equality_op", /((=|!)=)/g]
+			        ["equality_op", /((=|!)=)/g],
+			        ["operator", /(\+|\-|\*|\/|\%|\&|\!|\~|\.|\-\>|\+\+|\-\-)/g]
 			    ], bnf);
 			    var ul = print_json( cParser.parse(phrase) );
 			    document.querySelector("#tree").innerHTML = "";
