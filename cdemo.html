@@ -5,46 +5,95 @@
 	<script src="pearleyparser.js"></script>
 	<script src="https://raw.githubusercontent.com/purmou/print_json/master/print_json.js"></script>
 	<script>
-		function doParse() {
-		    var bnf = document.querySelector("#input").value;
-		    var phrase = document.querySelector("#test").value;
-		    var cParser = new PearleyParser([
-		        ["comment", /(\/\*([\s\S]*?)\*\/)/g],
-		        ["struct", /(struct)/g],
-		        ["storage_class_spec", /(static|extern|typedef)/g],
-		        ["type_spec", /(unsigned|signed|char|short|int|long|float|double)/g],
-		        ["select_stmt", /(if|else|switch)/g],
-		        ["labeled_stmt", /(case|default)/g],
-		        ["iterator_stmt", /(for|while|do)/g],
-		        ["jump_stmt", /(goto|return|break|continue)/g],
-		        ["id", /([A-Za-z_][A-Za-z_0-9]*)/g],
-		        ["int_const", /([0-9]+)/g],
-		        ["char_const", /('.')/g],
-		        ["float_const", /([0-9]+.[0-9]+)/g],
-		        ["string", /(".*?")/g],
-		        ["parens", /(\(|\))/g],
-		        ["comma", /(\,)/g],
-		        ["scope", /(\{|\})/g],
-		        ["semicolon", /(;)/g],
-		        ["assignment_op", /((&|\||\^|%|\+|\-|\*|\/|<<|>>)?\=)/g],
-		        ["operator", /(\+|\-|\*|\/|\%)/g],
-		        ["relational_op", /((<|>)=?)/g],
-		        ["equality_op", /((=|!)=)/g]
-		    ], bnf);
-		    var ul = print_json( cParser.parse(phrase) );
-		    document.querySelector("#tree").innerHTML = "";
-		    document.querySelector("#tree").appendChild(ul);
-		}
+			function print_json(obj) {
+			    /* the ul element to populate */
+			    var ul = document.createElement("ul");
+			    ul.classList.add("json");
 
-		window.onload = function () {
-		    document.querySelector("#tree").onclick = function (e) {
-		        if (e.target.classList.contains("parent")) {
-		            var ul = e.target.parentNode.getElementsByTagName("ul")[0];
-		            e.target.classList.toggle("collapsed");
-		            ul.classList.toggle("collapsed");
-		        }
-		    };
-		};
+			    /* for each element in our array/object... */
+			    for (var i in obj) {
+			        /* create a new li element to append */
+			        var li = document.createElement("li");
+			        
+			        /* don't try to print a function */
+			        if (typeof obj[i] === "function") continue;
+			        
+			        /* always include the key/index of this item */
+			        var objkey = document.createElement("span");
+			        objkey.classList.add("obj_key");
+			        objkey.appendChild(document.createTextNode(i + ": "));
+			        li.appendChild(objkey);
+
+			        /* if we're going to print an object... */
+			        if (typeof obj[i] === "object") {
+			            /* first make sure it's not null */
+			            /* or if it's an array, make sure it has length */
+			            if (obj[i] == null || obj[i].length === 0) {
+			                continue;
+
+			            /* otherwise, treat this li as a parent, and recurse */
+			            } else {
+			                objkey.classList.add("parent");
+			                li.appendChild(print_json(obj[i]));
+			            }
+
+			        /* if we're just printing an item... */
+			        } else {
+			            /* then append the item wrapped in quotes */
+			            var objval = document.createElement("span");
+			            objval.classList.add("obj_value");
+			            objval.appendChild(document.createTextNode('"' + obj[i] + '"'));
+			            li.appendChild(objval);
+			        }
+
+			        /* append this element to the entire list */
+			        ul.appendChild(li);
+			    }
+
+			    /* return the popoulated list */
+			    return ul;
+			}
+		
+			function doParse() {
+			    var bnf = document.querySelector("#input").value;
+			    var phrase = document.querySelector("#test").value;
+			    var cParser = new PearleyParser([
+			        ["comment", /(\/\*([\s\S]*?)\*\/)/g],
+			        ["struct", /(struct)/g],
+			        ["storage_class_spec", /(static|extern|typedef)/g],
+			        ["type_spec", /(unsigned|signed|char|short|int|long|float|double)/g],
+			        ["select_stmt", /(if|else|switch)/g],
+			        ["labeled_stmt", /(case|default)/g],
+			        ["iterator_stmt", /(for|while|do)/g],
+			        ["jump_stmt", /(goto|return|break|continue)/g],
+			        ["id", /([A-Za-z_][A-Za-z_0-9]*)/g],
+			        ["int_const", /([0-9]+)/g],
+			        ["char_const", /('.')/g],
+			        ["float_const", /([0-9]+.[0-9]+)/g],
+			        ["string", /(".*?")/g],
+			        ["parens", /(\(|\))/g],
+			        ["comma", /(\,)/g],
+			        ["scope", /(\{|\})/g],
+			        ["semicolon", /(;)/g],
+			        ["assignment_op", /((&|\||\^|%|\+|\-|\*|\/|<<|>>)?\=)/g],
+			        ["operator", /(\+|\-|\*|\/|\%)/g],
+			        ["relational_op", /((<|>)=?)/g],
+			        ["equality_op", /((=|!)=)/g]
+			    ], bnf);
+			    var ul = print_json( cParser.parse(phrase) );
+			    document.querySelector("#tree").innerHTML = "";
+			    document.querySelector("#tree").appendChild(ul);
+			}
+
+			window.onload = function () {
+			    document.querySelector("#tree").onclick = function (e) {
+			        if (e.target.classList.contains("parent")) {
+			            var ul = e.target.parentNode.getElementsByTagName("ul")[0];
+			            e.target.classList.toggle("collapsed");
+			            ul.classList.toggle("collapsed");
+			        }
+			    };
+			};
 	</script>
 
 	<style>
