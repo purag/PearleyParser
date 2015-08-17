@@ -105,7 +105,7 @@ function PearleyParser (lexRules, bnf) {
             type: "term",
             rule: [{
                 type: "terminal",
-                value: /(?:['"])(.+)(?:['"])/
+                value: /^(?:['"])(.+)(?:['"])/
             }],
             next: 0,
             source: 0
@@ -303,34 +303,6 @@ function PearleyParser (lexRules, bnf) {
             /* if one wasn't found, the parse failed */
             return ideal ? ideal.ast : ["Parse failed."];
         }
-    
-        /* a set of states for production rules */
-        function EarleySet () {
-            this.set = [];
-            this.length = 0;
-
-            /* check whether a given state exists in this set */
-            function contains (state) {
-                for (var i = 0; i < this.length; i++) {
-                    if (this.set[i].equals(state)) return true;
-                }
-                return false;
-            }
-            var containsState = contains.bind(this);
-
-            /* push a unique state to this set */
-            this.pushState = function (state) {
-                if (!containsState(state)) {
-                    this.set.push(state);
-                    this.length++;
-                }
-            };
-
-            /* get the state at the given index of this set */
-            this.getState = function (index) {
-                return index < this.length ? this.set[index] : null;
-            };
-        }
     }
     
     function Lexer (tokenizers) {
@@ -424,6 +396,34 @@ function PearleyParser (lexRules, bnf) {
                 };
             }
         }
+    }
+    
+    /* a set of states for production rules */
+    function EarleySet () {
+        this.set = [];
+        this.length = 0;
+
+        /* check whether a given state exists in this set */
+        function contains (state) {
+            for (var i = 0; i < this.length; i++) {
+                if (this.set[i].equals(state)) return true;
+            }
+            return false;
+        }
+        var containsState = contains.bind(this);
+
+        /* push a unique state to this set */
+        this.pushState = function (state) {
+            if (!containsState(state)) {
+                this.set.push(state);
+                this.length++;
+            }
+        };
+
+        /* get the state at the given index of this set */
+        this.getState = function (index) {
+            return index < this.length ? this.set[index] : null;
+        };
     }
 
     /* a node in an abstract syntax tree with an arbitrary number of children */

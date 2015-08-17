@@ -66,11 +66,11 @@
 			        ["labeled_stmt", /(case|default)/g],
 			        ["iterator_stmt", /(for|while|do)/g],
 			        ["jump_stmt", /(goto|return|break|continue)/g],
+			        ["string", /(".*?")/g],
 			        ["id", /([A-Za-z_][A-Za-z_0-9]*)/g],
 			        ["int_const", /([0-9]+)/g],
 			        ["char_const", /('.')/g],
 			        ["float_const", /([0-9]+.[0-9]+)/g],
-			        ["string", /(".*?")/g],
 			        ["parens", /(\(|\))/g],
 			        ["comma", /(\,)/g],
 			        ["scope", /(\{|\})/g],
@@ -404,8 +404,10 @@ primary_exp		::= id
 argument_exp_list	::= assignment_exp
 			| argument_exp_list ',' assignment_exp
 			;
-id				::= /([A-Za-z_][A-Za-z_0-9]*)/
+id				::= /^([A-Za-z_][A-Za-z_0-9]*)/
 			;
+string ::= /(".*?")/
+            ;
 const			::= int_const
 			| char_const
 			| float_const
